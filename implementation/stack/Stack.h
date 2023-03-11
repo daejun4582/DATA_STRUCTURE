@@ -12,6 +12,7 @@ class Stack{
         Stack();
         void push(int x);
         int pop();
+        int get_top();
         bool stack_full();
         bool stack_empty();
 

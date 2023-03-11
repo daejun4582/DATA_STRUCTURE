@@ -1,48 +1,59 @@
 #include <iostream>
 #include <stdlib.h>
-#include "Stack.h"
+#include "OpStack.h"
 using namespace std;
 
 
-Stack::Stack(){
+OpStack::OpStack(){
     count = 0;
     size = 3;
-    p = (int*)malloc(sizeof(size));
+    p = (char*)malloc(sizeof(size));
     top  = 0;
 }
 
-void Stack::push(int x){
+void OpStack::get_all(){
+    for(int i = 0; i < count; i++){
+        cout << p[i] << " ";
+    }
+    cout << endl;
+
+}
+
+void OpStack::push(char x){
     if(stack_full()){
         size *= 2;
-        p = (int*)realloc(p,sizeof(size));
+        p = (char*)realloc(p,sizeof(char)*size);
         p[top++] = x;
         count++;
+
     }
     else{
         p[top++] = x;
         count++;
+
     } 
 }
 
-int Stack::pop(){
+char OpStack::pop(){
     if(count < size/2){
         size /= 2;
-        p = (int*)realloc(p,sizeof(size));
+        p = (char*)realloc(p,sizeof(size));
     }
     count--;
+
     return p[--top];
 }
 
-int Stack::get_top(){
+char OpStack::get_top(){
     return p[top-1];
 }
 
-bool Stack::stack_full(){
+bool OpStack::stack_full(){
     if(top>=size) return true;
     else return false;
 }
 
-bool  Stack::stack_empty(){
+bool  OpStack::stack_empty(){
     if(top ==0 ) return true;
     else return false;
 }

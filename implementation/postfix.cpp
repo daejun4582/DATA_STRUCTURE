@@ -1,32 +1,127 @@
 #include <iostream>
-#include <stdlib.h>
-#include "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/implementation/stack/Stack.h"
+#include <cstdlib>
+#include "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/implementation/op_stack/OpStack.h"
 using namespace std;
 
 
 /*
-
------Logic------
-1. Stack을 생성하고 초기화(operator를 원소로 저장하는 stack) 한 후, stack에 EOS를 넣고 시작한다.
-2.  입력 수식으로부터 token을 한 개씩 취하여 다음을 반복
-    해당 token이
-        (1) ‘(‘ 이면stack에 넣는다.
-        (2) ‘)’ 이면, stack에서 ‘(‘ 이 나올때까지 pop하여 출력한다. 그리고 나서 ‘(‘ 를 stack에서 삭제
-        (3) Operator면 stack top 원소의 우선순위가 자신(해당 token)의 우선순위보다 낮아질 때까지pop하여 출력한다. 
-            그리고 나서 해당 token을 stack에 넣는다.
-        (4)  Operand면 그대로 출력한다.
-3.   Stack에 남아 있는 모든 원소를 순서대로 pop하여 출력한다.
+--run command--
+cd "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/assignment/" && g++ -std=c++2a -g hw3_22200341_BanDaeJun.cpp /Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/implementation/op_stack/OpStack.cpp -o a.out  && "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/assignment/"/a.out
 */
 
 
+struct oper {
+    char*op;
+    int op_len;
+};
+
+
+string postfix(OpStack stack,string com,oper cehck);
+bool is_operand(char ch, oper check);
+int get_precedence(char op, oper check);
+
 
 int main(void){
-    Stack s = Stack();
-    string expression;
-    cout<<"변환할 식을 입력해주세요. : ";
-    cin >> expression;
-    cout<<expression[0]<<endl;
+    string command;
 
+    oper op;
+
+    op.op_len = 7;
+    op.op = (char*)malloc(sizeof(op.op_len));
+
+    char oper[] = { '(', '$', '+', '-', '*', '/', '%'};
+    for(int i = 0; i< op.op_len; i++) op.op[i] = oper[i];
+
+    OpStack stack = OpStack();
+
+    stack.push('$');
+
+    cout<<"변환할 infix 방식의 식을 입력해주세요. : ";
+
+    cin >> command;
+
+    postfix(stack,command,op);
+
+    // cout << "변환한 postfix 결과는 다음과 같습니다. : " << postfix(command,op) <<endl;
 
     return EXIT_SUCCESS;
 }
+
+string postfix(OpStack stack,string com,oper check){
+
+    char token;
+
+    for(int i = 0; i < com.length(); i++){
+
+        token = com[i];
+        
+        if(is_operand(token,check)){
+
+            if(token == '(') {
+                
+                stack.push('(');
+
+            }
+
+            else{     
+                
+                while(get_precedence(stack.get_top(),check) >= get_precedence(token,check)) cout << stack.pop() ;
+    
+                stack.push(token);
+
+            }
+
+        }
+        else{
+
+            if(token == ')') {
+
+                while(stack.get_top() != '(') cout << stack.pop() ;
+
+                stack.pop();
+            }
+            else 
+                cout << token ;
+            
+        }
+            
+    }
+
+    while(stack.get_top() != '$') cout << stack.pop() ;
+    cout << endl;
+
+    return com ;
+}
+
+bool is_operand(char ch, oper check){
+
+    for (int i = 0; i< check.op_len; i++)
+        if(ch == check.op[i]) return true;
+    
+    return false;
+}
+
+
+
+int get_precedence(char op, oper check){
+    int prec;
+    for (int i = 0; i< check.op_len; i++)
+        if(op == check.op[i]) {
+            prec = (i / 2);
+            if(prec>=3) return 2;
+        }
+    
+    return prec;
+    
+}
+
+
+/*
+G*(A-B*(C/D+E)/F)
+GABCD/E+*F/-* 
+
+A+B+C*D-E*F
+AB+CD*+EF*-
+*/
+
+
