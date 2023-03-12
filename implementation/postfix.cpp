@@ -6,7 +6,7 @@ using namespace std;
 
 /*
 --run command--
-cd "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/assignment/" && g++ -std=c++2a -g hw3_22200341_BanDaeJun.cpp /Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/implementation/op_stack/OpStack.cpp -o a.out  && "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/assignment/"/a.out
+cd "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/assignment/" && g++ -std=c++2a -g /Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/implementation/postfix.cpp /Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/implementation/op_stack/OpStack.cpp -o a.out  && "/Users/bandaejun/Documents/GitHub/DATA_STRUCTURE/assignment/"/a.out
 */
 
 

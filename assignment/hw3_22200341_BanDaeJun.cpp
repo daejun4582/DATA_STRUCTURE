@@ -50,8 +50,6 @@ int main(void){
 
     cin >> command;
 
-    
-
     cout <<"변환한 postfix 결과는 다음과 같습니다. : " ;
 
     postfix(stack,command,op);
@@ -153,21 +151,3 @@ bool  op_stack::stack_empty(){
     if(top ==0 ) return true;
     else return false;
 }
-
-
-
-
-
-
-/*
---case--
-
-1)
-G*(A-B*(C/D+E)/F)
-GABCD/E+*F/-* 
-
-2)
-A+B+C*D-E*F
-AB+CD*+EF*-
-
-*/
