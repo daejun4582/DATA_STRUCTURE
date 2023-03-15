@@ -40,9 +40,9 @@ int main(void){
 
     cin >> command;
 
-    postfix(stack,command,op);
+    // postfix(stack,command,op);
 
-    // cout << "변환한 postfix 결과는 다음과 같습니다. : " << postfix(command,op) <<endl;
+    cout << "변환한 postfix 결과는 다음과 같습니다. : " << postfix(stack,command,op) <<endl;
 
     return EXIT_SUCCESS;
 }
@@ -50,6 +50,7 @@ int main(void){
 string postfix(OpStack stack,string com,oper check){
 
     char token;
+    string result;
 
     for(int i = 0; i < com.length(); i++){
 
@@ -65,7 +66,7 @@ string postfix(OpStack stack,string com,oper check){
 
             else{     
                 
-                while(get_precedence(stack.get_top(),check) >= get_precedence(token,check)) cout << stack.pop() ;
+                while(get_precedence(stack.get_top(),check) >= get_precedence(token,check)) result += stack.pop();//cout << stack.pop() ;
     
                 stack.push(token);
 
@@ -76,21 +77,22 @@ string postfix(OpStack stack,string com,oper check){
 
             if(token == ')') {
 
-                while(stack.get_top() != '(') cout << stack.pop() ;
+                while(stack.get_top() != '(') result += stack.pop();//cout << stack.pop() ;
 
                 stack.pop();
             }
-            else 
-                cout << token ;
+            else
+                result += token; 
+                // cout << token ;
             
         }
             
     }
 
-    while(stack.get_top() != '$') cout << stack.pop() ;
+    while(stack.get_top() != '$') result += stack.pop();//cout << stack.pop() ;
     cout << endl;
 
-    return com ;
+    return result ;
 }
 
 bool is_operand(char ch, oper check){
