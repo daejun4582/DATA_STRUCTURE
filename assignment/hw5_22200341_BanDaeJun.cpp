@@ -1,9 +1,8 @@
 #include <iostream>
 #include <cstdlib>
+#include <string>
 #define SIZE 100
-
 using namespace std;
-
 
 class op_stack{
      private:
@@ -18,102 +17,62 @@ class op_stack{
         bool stack_empty();
 };
 
+bool check_panlindrome(op_stack stack,string str);
 
-struct oper {
-    char*op;
-    int op_len;
-};
-
-
-bool is_operand(char ch, oper check);
-
-bool check_infix(op_stack stack,string command, oper op);
+string preprocess_string(string str);
 
 
 int main(void){
 
-    string command;
+    op_stack stack;
 
-    bool result;
+    string str;
 
-    oper op;
-
-    op_stack stack = op_stack();
-
-    op.op = new char[3];
-
-    op.op_len = 3;
-
-    char oper[] = { '{', '(', '['};
-
-    for(int i = 0; i< op.op_len; i++) op.op[i] = oper[i];
-
-    cout<<"검사할 infix 방식의 식을 입력해주세요. : ";
-
-    getline(cin, command);
-
-    result = check_infix(stack,command,op);
-
-    cout << "해당 식은 "<< (result? "올바릅니다." : "잘못되었습니다.") << endl;
-
+    cout << "pelindrome을 확인할 문장을 입력하세요 . : ";
     
+    getline(cin,str);
+
+    str = preprocess_string(str);
+
+    if(str.size() == 0) {
+        cout<< "본 문장은 panlindrome이 아닙니다." <<endl;
+        return EXIT_SUCCESS;
+    }
+
+    cout << "본 문장은 panlindrome" <<((check_panlindrome(stack,str)? " 입니다": "이 아닙니다.")) << endl;
+
+
     return EXIT_SUCCESS;
 }
 
-bool check_infix(op_stack stack,string command, oper op){
-    char token;
-    char error;
-    for(int i = 0; i< command.size(); i++){
-        token = command[i];
-        if(is_operand(token, op)){
-            stack.push(token);
-        }
-        else{
-            if(token == ')'){
-                if(stack.get_top() == '(' && !stack.stack_empty()) stack.pop();
-                else if(stack.stack_empty()) {cout << " '(' 가 Stack 내에 존재하지 않습니다." << endl; return false;}
-                else {cout << " '(' 가 필요합니다." << endl; return false;}
-            }
-            else if(token == '}'){
-                if(stack.get_top() == '{' && !stack.stack_empty()) stack.pop();
-                else if(stack.stack_empty()) {cout << " '{' 가 Stack 내에 존재하지 않습니다." << endl; return false;}
-                else {cout << " '{' 가 필요합니다." << endl; return false;}
-            }
-            else if(token == ']'){
-                if(stack.get_top() == '[' && !stack.stack_empty()) stack.pop();
-                else if(stack.stack_empty()) {cout << " '[' 가 Stack 내에 존재하지 않습니다." << endl; return false;}
-                else {cout << " '[' 가 필요합니다." << endl; return false;}
-            }
-            
-        }
+bool check_panlindrome(op_stack stack, string str){
+
+    int str_len = str.size();    
+
+    for(int i = 0; i< (str_len)/2 ; i++) {
+        stack.push(str[i]);
 
     }
 
-    if(!stack.stack_empty()) {
-        error = stack.get_top();
-        if(error == '('){
-            cout << " ')' 가 필요합니다." << endl;
-        }
-        else if(error == '{'){
-            cout << " '}' 가 필요합니다." << endl;
-        }
-        else if(error == '['){
-            cout << " ']' 가 필요합니다." << endl;
-        }
-        return false;
-          }
-    return true;
-}
-
-
-bool is_operand(char ch, oper check){
-
-    for (int i = 0; i< check.op_len; i++)
-        if(ch == check.op[i]) return true;
     
-    return false;
+    for(int i = ((str_len % 2 ==0)? str_len/2 : str_len/2 +1); i<str.size();  i++){
+        if(stack.pop() != str[i]) return false;
+    }
+    
+
+    return true;;
 }
 
+string preprocess_string(string str){
+
+    str.erase(remove(str.begin(), str.end(), ' '), str.end());
+    string result;
+    for(int i =0; i<str.size(); i++){
+        if(isalpha(str[i])!=0)
+            result += tolower(str[i]);
+    }
+    return result;
+}
 
 op_stack ::op_stack(){
     top = 0;
@@ -130,7 +89,6 @@ char op_stack::pop(){
 char op_stack::get_top(){
     return s[top-1];
 }
-
 
 bool op_stack::stack_full(){
     if(top>=SIZE) return true;

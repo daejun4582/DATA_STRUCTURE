@@ -4,18 +4,18 @@
 
 using namespace std;
 
-class mystack{
-    private:
+
+class op_stack{
+     private:
         int top;
-        int* s = new int[SIZE];
+        char* s = new char[SIZE];
     public:
-        mystack();
-        void push(int x);
-        int pop();
-        int get_top();
+        op_stack();
+        void push(char x);
+        char pop();
+        char get_top();
         bool stack_full();
         bool stack_empty();
-        
 };
 
 
@@ -24,76 +24,101 @@ struct oper {
     int op_len;
 };
 
-int cal_postfix(mystack stack, string command, oper op);
-
-int cal(int num1, int num2, char oper);
 
 bool is_operand(char ch, oper check);
+
+bool check_infix(op_stack stack,string command, oper op);
+
 
 int main(void){
 
     string command;
 
+    bool result;
+
     oper op;
 
-    mystack stack = mystack();
+    op_stack stack = op_stack();
 
-    op.op_len = 7;
-    op.op = (char*)malloc(sizeof(op.op_len));
+    op.op = new char[3];
 
-    char oper[] = { '(', '$', '+', '-', '*', '/', '%'};
+    op.op_len = 3;
+
+    char oper[] = { '{', '(', '['};
+
     for(int i = 0; i< op.op_len; i++) op.op[i] = oper[i];
 
-    cout<<"계산할 식을 postfix 방식의 식을 입력해주세요. : ";
+    cout<<"검사할 infix 방식의 식을 입력해주세요. : ";
 
-    cin >> command;
+    getline(cin, command);
 
-    cout << "계산 결과는 다음과 같습니다. : " << cal_postfix(stack,command,op) << endl;
+    result = check_infix(stack,command,op);
 
+    cout << "해당 식은 "<< (result? "올바릅니다." : "잘못되었습니다.") << endl;
+
+    
     return EXIT_SUCCESS;
 }
 
-int cal_postfix(mystack stack, string command,oper op){
-
+bool check_infix(op_stack stack,string command, oper op){
     char token;
-    int num1,num2;
-
-    for(int i = 0; i < command.size(); i++){
+    char error;
+    for(int i = 0; i< command.size(); i++){
         token = command[i];
-
         if(is_operand(token, op)){
-            num2 = stack.pop();
-
-            num1 = stack.pop();
-
-            stack.push(cal(num1,num2,token));
+            stack.push(token);
         }
         else{
-            stack.push(token-48);
+            if(token == ')'){
+                if(stack.get_top() == '(' && !stack.stack_empty()) stack.pop();
+                else{
+                    cout << "괄호 불일치" << endl;
+                    if(stack.stack_empty()) {cout << " '(' 가 Stack 내에 존재하지 않습니다." << endl; return false;}
+                    else {cout << " '(' 가 필요합니다." << endl; return false;}
+                }
+            }
+            else if(token == '}'){
+                if(stack.get_top() == '{' && !stack.stack_empty()) stack.pop();
+                else{
+                    cout << "괄호 불일치" << endl;
+                    if(stack.stack_empty()) {cout << " '{' 가 Stack 내에 존재하지 않습니다." << endl; return false;}
+                    else {cout << " '{' 가 필요합니다." << endl; return false;}
+                }
+                
+            }
+            else if(token == ']'){
+                if(stack.get_top() == '[' && !stack.stack_empty()) stack.pop();
+                else{
+                    cout << "괄호 불일치" << endl;
+                    if(stack.stack_empty()) {cout << " '[' 가 Stack 내에 존재하지 않습니다." << endl; return false;}
+                    else { cout << " '[' 가 필요합니다." << endl; return false;}
+
+                }
+                
+            }
+            
         }
 
     }
 
-    return stack.get_top();
+    if(!stack.stack_empty()) {
+        error = stack.get_top();
+        cout <<"닫는 괄호 누락" <<endl;
+
+        if(error == '('){
+            cout << " ')' 가 필요합니다." << endl;
+        }
+        else if(error == '{'){
+            cout << " '}' 가 필요합니다." << endl;
+        }
+        else if(error == '['){
+            cout << " ']' 가 필요합니다." << endl;
+        }
+        return false;
+          }
+    return true;
 }
 
-int cal(int num1, int num2, char oper){
-    int result;
-    if(oper == '+'){
-        result =  num1 + num2;
-    }
-    else if(oper == '-'){
-        result =  num1 - num2;
-    }
-    else if(oper == '/'){
-        result =  num1 / num2;
-    }
-    else if(oper == '*'){
-        result =  num1 * num2;
-    }
-
-    return result;
-}
 
 bool is_operand(char ch, oper check){
 
@@ -104,29 +129,29 @@ bool is_operand(char ch, oper check){
 }
 
 
-
-mystack::mystack(){
+op_stack ::op_stack(){
     top = 0;
 }
 
-void mystack::push(int x){
+void op_stack::push(char x){
     s[top++] = x;
 }
 
-int mystack::pop(){
+char op_stack::pop(){
     return s[--top];
 }
 
-int mystack::get_top(){
+char op_stack::get_top(){
     return s[top-1];
 }
 
-bool mystack::stack_full(){
+
+bool op_stack::stack_full(){
     if(top>=SIZE) return true;
     else return false;
 }
 
-bool  mystack::stack_empty(){
+bool  op_stack::stack_empty(){
     if(top ==0 ) return true;
     else return false;
 }
