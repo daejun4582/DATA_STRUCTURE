@@ -61,6 +61,73 @@ Node LinkedList::delete_from_head(){
     return temp;
 }
 
+Node LinkedList::delete_from_tail(){
+    Node *t, *f, *pre, temp;
+
+    int num_node = num_nodes();
+
+    f = head;
+
+    t = tail;
+    temp = *tail;
+
+    pre = NULL;
+
+    while(f -> link != NULL) {
+        pre = f;
+        f = f -> link;
+    }
+    
+    if(pre == NULL){
+
+        tail = NULL;
+        head = NULL;
+
+        delete t;
+
+        return temp;
+    }
+
+    tail = pre;
+    tail->link = NULL;
+    
+    delete t;
+
+    if(tail == NULL) head = NULL;
+
+    return temp;
+}
+
+bool LinkedList::delete_from_middle(string node_name){
+    Node *f, *pre, temp;
+
+    f = head;
+    pre = NULL;
+
+    while(f -> link != NULL){
+        
+        if(f->getData().name == node_name) break;
+        pre = f;
+        f = f ->link;
+
+    }
+
+    if(f == NULL) return false;
+
+
+    if(pre == NULL) temp =  delete_from_head();
+    else if(f->link == NULL) temp = delete_from_tail();
+    else {
+        pre-> link = f->link;
+        temp = *f;
+
+        delete f;
+    }
+
+    cout << "현재 삭제한 데이터의 이름은 " << temp.getData().name <<endl;
+    return true;
+}
+
 int LinkedList::num_nodes(){
     Node *t;
 
@@ -72,9 +139,33 @@ int LinkedList::num_nodes(){
     return count;
 }
 
+double LinkedList::score_sum(){
+    Node *t;
+    double sum = 0;
+    for(t = head; t != NULL; t = t->link){
+        sum += t->getData().score;
+    }
+    return sum;
+}
+
 bool LinkedList::list_empty(){
     if(head == NULL) return true;
     return false;
+}
+
+double LinkedList::get_score(string node_name){
+    Node *t;
+    double result = -1;
+    for(t = head; t != NULL; t = t->link){
+
+        if(node_name == t->getData().name){
+            result =  t->getData().score;
+            break;
+        }
+            
+    }
+    
+    return result;
 }
 
 void LinkedList::get_all(){
@@ -91,6 +182,5 @@ void LinkedList::get_all(){
         cout << "\n\n" ;
     }
 
-
-    
 }
+
