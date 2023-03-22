@@ -26,13 +26,13 @@ class Queue{
 };
 
 enum Menus{
-    IN,
+    IN=1,
     OUT,
     PRINT_FRONT,
     EXIT
 };
 
-
+void print_menu();
 void data_in(Queue *queue);
 void data_out(Queue *queue);
 void data_print(Queue *queue);
@@ -46,9 +46,10 @@ int main(void){
     indata data;
 
     while(true){
-        cout << "사용할 명령어를 입력하세요. ( insert : 0 | delete : 1 | print_front : 2 | exit : 3 ) : ";
+        print_menu();
+        cout << "명령어 : ";
         cin >> com;
-
+        cout << endl;
         status = false;
 
         switch(com){
@@ -75,6 +76,17 @@ int main(void){
     return EXIT_SUCCESS;
 }
 
+void print_menu(){
+    cout << "\n------------------------" << endl; 
+    cout << "사용할 명령어를 입력하세요.\n" << endl;
+    cout << "1. Insert " << endl;
+    cout << "2. Delete " << endl; 
+    cout << "3. Print_front" << endl;
+    cout << "4. Exit " << endl;
+    cout << "------------------------" << endl; 
+}
+
+
 void data_in(Queue *queue){
     struct indata data;
     cout << "입력할 데이터를 입력하세요" <<endl;
@@ -84,7 +96,7 @@ void data_in(Queue *queue){
     cin >> data.pages ;
     cout << "책 가격 : ";
     cin >> data.price ;
-    cout << ((*queue).Enqueue(data)? "입력 되었습니다." :"데이터가 모두 찼습니다.") << endl;
+    cout << ((*queue).Enqueue(data)? "\n입력 되었습니다." :"\n데이터가 모두 찼습니다.") << endl;
 }
 
 void data_out(Queue *queue){
