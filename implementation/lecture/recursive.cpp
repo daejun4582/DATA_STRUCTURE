@@ -1,5 +1,6 @@
 #include <iostream>
 #include <cstdlib>
+#include <cmath>
 
 using namespace std;
 
@@ -7,13 +8,14 @@ using namespace std;
 void reversing1(string s, int N, int idx);
 string reversing2(string s, int N, int idx);
 bool check_panlindrome(string s, int N, int idx);
+int sumDigits1(int n);
+int sumDigits2(int n);
+int count8(int n );
 
 
 int main(void){
 
-    string s = "helkleh";
-
-    cout << (check_panlindrome(s,s.size(),0)? "회문입니다":"회문이 아닙니다.") << endl;
+    cout << count8(888) << endl;
 
     return EXIT_SUCCESS;
 }
@@ -53,4 +55,39 @@ bool check_panlindrome(string s, int N, int idx){
     }
     
     return false;
+}
+
+
+int sumDigits1(int n){
+
+    int digit = 0,num,result;
+
+    while(true){
+        num = pow(10,digit);
+        if( n / num == 0) break;
+        digit ++;
+    }
+    
+    num /= 10;
+    result = n / num ;
+    n -= result * num;
+    
+
+    if(n == 0)  return result;
+
+    return result + sumDigits1(n);
+
+} 
+
+int sumDigits2(int n){
+    if(n == 0) return 0;
+    return  n%10 + sumDigits2(n/10);
+}
+
+int count8(int n ){
+    if(n == 0) return 0;
+
+    if(n%10 == 8)
+        return 1 + count8(n/10);
+    return 0 + count8(n/10);
 }
