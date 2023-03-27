@@ -148,9 +148,48 @@ double LinkedList::score_sum(){
     return sum;
 }
 
+double LinkedList::score_min(){
+    Node *t;
+    double min = head->getData().score;
+    for(t = head; t != NULL; t = t->link){
+        if(min > t->getData().score)
+            min = t->getData().score;
+    }
+    return min;
+}
+double LinkedList::score_max(){
+    Node *t;
+    double max = head->getData().score;
+    for(t = head; t != NULL; t = t->link){
+        if(max < t->getData().score)
+            max = t->getData().score;
+    }
+    return max;
+}
+double LinkedList::score_mean(){
+    return score_sum()/num_nodes();
+}
+
 bool LinkedList::list_empty(){
     if(head == NULL) return true;
     return false;
+}
+
+void LinkedList::get_statics(){
+    double max = score_max();
+    double min = score_min();
+    double sum = score_sum();
+    double mean = score_mean();
+
+
+    cout << "--------------------------" << endl;
+    cout << "         statics          " << endl;
+    cout << "--------------------------" << endl;
+    cout <<"    max      [" << max << "]" << endl;
+    cout <<"    min      [" << min << "]" << endl;
+    cout <<"    sum      [" << sum << "]" << endl;
+    cout <<"    mean     [" << mean << "]" << endl;
+    cout << "--------------------------" << endl;
 }
 
 double LinkedList::get_score(string node_name){

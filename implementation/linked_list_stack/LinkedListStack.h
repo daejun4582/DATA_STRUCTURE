@@ -1,13 +1,16 @@
 #include <iostream>
+
 using namespace std;
-#ifndef __LINKED_LIST_H__
-#define __LINKED_LIST_H__
+
+#ifndef LINKEDLISTSTACK_H_
+#define LINKEDLISTSTACK_H_
 
 struct data{
     string name;
     string id;
     double score;
 };
+
 
 class Node{
     private:
@@ -24,23 +27,26 @@ class LinkedList{
     public:
         LinkedList();
         void add_to_head(Node t);
-        void add_to_tail(Node t);
         Node delete_from_head();
-        Node delete_from_tail();
-        bool delete_from_middle(string node_name);
         int num_nodes();
-        double score_sum();
-        double score_min();
-        double score_max();
-        double score_mean();
         bool list_empty();
-        void get_statics();
-        double get_score(string node_name);
         void get_all();
-
+        Node get_head();
 };
 
+class LinkedListStack{
+    private:
+        LinkedList _p;
+    public:
+        LinkedListStack();
+        void push(struct data p);
+        struct data pop();
+        struct data top();
+        int get_len();
+        void get_dataes();
+        bool stack_empty();
 
+};
 
 
 
