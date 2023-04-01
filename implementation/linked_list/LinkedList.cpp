@@ -46,6 +46,76 @@ void LinkedList::add_to_tail(Node t){
     tail = p;
 }
 
+void LinkedList::add_insorting(Node t){
+    Node *p, *f, *pre ,temp;
+    p = new Node;
+
+
+    if(head == NULL){
+        (*p) = t;
+        p->link = head;
+        head = p;
+        if(tail == NULL) tail = p;
+        return;
+    }
+
+    f = head;
+    pre = NULL;
+
+    while(f -> link != NULL){
+        
+        if(t.getData().score > f->getData().score ){
+            pre = f;
+            f = f ->link;
+        }
+        else if(pre == NULL){
+            (*p) = t;
+            p->link = head;
+            head = p;
+            return;
+        }
+        else{
+            (*p) = t;
+            p -> link = f;
+            pre -> link = p;
+            return;
+
+        }
+
+    }
+
+    if(f == NULL){
+        (*p) = t;
+        p ->link = NULL;
+        pre ->link = p;
+        tail = p;
+        return;
+        }
+    else if(t.getData().score > f->getData().score){
+        (*p) = t;
+        p ->link = NULL;
+        f ->link = p;
+        tail = p;
+        return;
+    }
+    else if(pre == NULL){
+
+        (*p) = t;
+        p->link = head;
+        head = p;
+        return;
+    }
+    else {
+
+        (*p) = t;
+        p -> link = f;
+        pre -> link = p;
+        return;
+    }
+
+
+}
+
 Node LinkedList::delete_from_head(){
     Node *t;
     Node temp;
@@ -126,6 +196,80 @@ bool LinkedList::delete_from_middle(string node_name){
 
     cout << "현재 삭제한 데이터의 이름은 " << temp.getData().name <<endl;
     return true;
+}
+
+void LinkedList::delete_low_score(double n){
+
+    if(head == NULL) return;
+
+    Node *t;
+
+    string delete_list[num_nodes()];
+
+    int idx = 0;
+
+    for(t = head; t != NULL; t = t->link){
+        if(t->getData().score < n){
+            delete_list[idx] = t->getData().name;
+            idx++;
+        }
+            
+    }
+
+    for(int i = 0; i < idx; i++){
+        delete_from_middle(delete_list[i]);
+    }
+
+}
+
+void LinkedList::delete_low_score_faster(double n){
+    Node *new_node, *old_node, *temp;
+    
+    if(head == NULL) return;
+
+    new_node = head;
+    old_node = NULL;  
+    
+    while(new_node -> link != NULL){
+
+        if(new_node->getData().score < n && old_node != NULL){
+
+            temp = new_node;
+            new_node = new_node->link;
+            old_node->link = new_node;
+
+            delete temp;
+
+            
+        }
+        else if(new_node->getData().score < n && old_node == NULL){
+            temp = new_node;
+            new_node = new_node->link;
+            head = new_node;
+            delete temp;
+
+        }
+        else{
+            old_node = new_node;
+            new_node = new_node -> link;
+        }
+        
+    }
+
+    if(new_node->getData().score < n){
+        temp = new_node;
+        new_node = new_node->link;
+        tail = old_node;
+        tail->link = NULL;
+        if(new_node == NULL) head = NULL;
+
+        delete temp;
+    }
+    else{
+        tail = new_node;
+        tail -> link = NULL;
+    }
+
 }
 
 int LinkedList::num_nodes(){
@@ -222,4 +366,43 @@ void LinkedList::get_all(){
     }
 
 }
+
+void LinkedList::invert(){
+
+    Node *newhead = NULL,*oldhead = head,*tmp;
+
+    while(oldhead != NULL){
+        tmp = newhead;
+        newhead = oldhead;
+        oldhead = oldhead ->link;
+        newhead ->link = tmp;
+    }
+    
+    tail = head;
+    head = newhead;
+
+}
+
+bool list_equal(LinkedList a, LinkedList b){
+    return is_equal(a.head, b.head);
+    }
+
+bool is_equal(Node *p1, Node *p2){
+    if ( (p1 == NULL) &&  (p2 == NULL) )
+        return true;
+    if ( (p1 == NULL) ||  (p2 == NULL) )  // AND 조건은 처리 되었으므로, OR 조건 가능
+        return false;
+    if ( equal_data(*p1, *p2) )
+        return(is_equal(p1->link, p2->link));
+    else
+        return false;
+    }
+
+bool  equal_data(Node t1, Node t2){
+    if (t1.getData().name != t2.getData().name)
+        return false;
+    if (t1.getData().score != t2.getData().score)
+        return false;
+    return true;
+    }
 

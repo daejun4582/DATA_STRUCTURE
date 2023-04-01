@@ -7,9 +7,11 @@ using namespace std;
 string menu[] = {
     "in_head              ",
     "in_tail              ",
+    "in_sorting           ",
     "delete_from_head     ",
     "delete_from_tail     ",
     "delete_from_middle   ",
+    "delete_low_score     ",
     "get_sum_of_score     ",
     "get_min_of_score     ",
     "get_max_of_score     ",
@@ -19,6 +21,7 @@ string menu[] = {
     "get_statics          ",
     "get_score            ",
     "get_all              ",
+    "invert               ",
     "break                "
     };
 
@@ -26,9 +29,11 @@ enum Menus
 {
     IN_HEAD,
     IN_TAIL,
+    IN_SORTING,
     DELETE_FROM_HEAD,
     DELETE_FROM_TAIL,
     DELETE_FROM_MIDDLE,
+    DELETE_LOW_SCORE,
     GET_SUM_OF_SCORE,
     GET_MIN_OF_SCORE,
     GET_MAX_OF_SCORE,
@@ -38,15 +43,19 @@ enum Menus
     GET_STACTICS,
     GET_SCORE,
     GET_ALL,
-    BREAK
+    INVERT,
+    BREAK,
+    COUNT
 };
 
 void print_menu(string *menu);
 void call_in_head            (LinkedList &mylist);
 void call_in_tail            (LinkedList &mylist);
+void call_in_sorting         (LinkedList &mylist);
 void call_delete_from_head   (LinkedList &mylist);
 void call_delete_from_tail   (LinkedList &mylist);
 void call_delete_from_middle (LinkedList &mylist);
+void call_delete_low_score   (LinkedList &mylist);
 void call_get_sum_of_score   (LinkedList &mylist);
 void call_get_min_of_score   (LinkedList &mylist);
 void call_get_max_of_score   (LinkedList &mylist);
@@ -56,10 +65,11 @@ void call_get_num            (LinkedList &mylist);
 void call_get_statics        (LinkedList &mylist);
 void call_get_score          (LinkedList &mylist);
 void call_get_all            (LinkedList &mylist);
+void call_invert             (LinkedList &mylist);
 void run_program             (LinkedList &mylist);
 
 int main(void){
-    LinkedList mylist;
+    LinkedList mylist = LinkedList();
     
     run_program(mylist);
     
@@ -67,13 +77,14 @@ int main(void){
 }
 
 void print_menu(string *menu){
+
     cout << "\n사용할 명령어를 입력하세요. \n" << endl;
     cout << "--------------------------" << endl;
     cout << "         Menu List" << endl;
     cout << "--------------------------" << endl;
 
 
-    for(int i = 0; i < 15; i++){
+    for(int i = 0; i < Menus::COUNT; i++){
        cout << menu[i] << " [" << i << "]"<<endl;
     }
     cout << "--------------------------" << endl;
@@ -117,6 +128,26 @@ void call_in_tail            (LinkedList &mylist){
     
     t.setData(indata);
     mylist.add_to_tail(t);
+
+    cout << "완료되었습니다." << endl;
+}
+
+void call_in_sorting         (LinkedList &mylist){
+    Node t;
+    struct data indata;
+    cout << "입력할 데이터를 입력해주세요 : " << endl;
+
+    cout << "이름  : ";
+    cin >> indata.name;
+
+    cout << "학번  : ";
+    cin >>indata.id ;
+
+    cout << "점수  : ";
+    cin >> indata.score;
+    
+    t.setData(indata);
+    mylist.add_insorting(t);
 
     cout << "완료되었습니다." << endl;
 }
@@ -166,6 +197,19 @@ void call_delete_from_middle (LinkedList &mylist){
     }
     else{
         cout << "더이상 삭제할 데이터가 존재하지 않습니다." << endl;
+    }
+}
+void call_delete_low_score   (LinkedList &mylist){
+    double score;
+    if(mylist.list_empty() == false){
+        cout << "삭제할 기준을 입력해주세요." << endl;
+        cin >> score;
+        mylist.delete_low_score_faster(score);
+        cout << "완료하였습니다." << endl;
+        call_get_all(mylist);
+    }
+    else{
+        cout << "삭제할 데이터가 존재하지 않습니다." << endl;
     }
 }
 void call_get_sum_of_score   (LinkedList &mylist){
@@ -242,6 +286,15 @@ void call_get_all            (LinkedList &mylist){
     }
 }
 
+void call_invert             (LinkedList &mylist){
+    if(mylist.list_empty() == false){
+        mylist.invert();
+        cout << "완료되었습니다. " << endl;
+    }
+    else {
+        cout << "데이터가 존재하지 않습니다." << endl;
+    }
+}
 
 void run_program             (LinkedList &mylist){
     int command;
@@ -261,6 +314,10 @@ void run_program             (LinkedList &mylist){
                 call_in_tail(mylist);
                 break;
 
+            case Menus::IN_SORTING :
+                call_in_sorting(mylist);
+                break;
+
             case Menus::DELETE_FROM_HEAD :
                 call_delete_from_head(mylist);
                 break;
@@ -271,6 +328,10 @@ void run_program             (LinkedList &mylist){
 
             case Menus::DELETE_FROM_MIDDLE :
                 call_delete_from_middle(mylist);
+                break;
+            
+            case Menus::DELETE_LOW_SCORE :
+                call_delete_low_score(mylist);
                 break;
 
             case Menus::GET_SUM_OF_SCORE :
@@ -307,6 +368,11 @@ void run_program             (LinkedList &mylist){
             case Menus::GET_ALL :
                 call_get_all(mylist);
                 
+                break;
+            
+            case Menus::INVERT:
+                call_invert(mylist);
+
                 break;
 
             case Menus::BREAK :

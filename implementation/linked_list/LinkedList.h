@@ -25,9 +25,12 @@ class LinkedList{
         LinkedList();
         void add_to_head(Node t);
         void add_to_tail(Node t);
+        void add_insorting(Node t);
         Node delete_from_head();
         Node delete_from_tail();
         bool delete_from_middle(string node_name);
+        void delete_low_score(double n);
+        void delete_low_score_faster(double n);
         int num_nodes();
         double score_sum();
         double score_min();
@@ -37,8 +40,14 @@ class LinkedList{
         void get_statics();
         double get_score(string node_name);
         void get_all();
+        void invert();
+        friend bool list_equal(LinkedList a, LinkedList b);
 
 };
+
+bool is_equal(Node *p1, Node *p2);
+
+bool  equal_data(Node t1, Node t2);
 
 
 
