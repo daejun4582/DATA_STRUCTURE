@@ -18,6 +18,14 @@ bool Node::setData(struct data p){
     return true;
 }
 
+bool Node::setData(string n, double s){
+    
+    a.score = s;
+    a.name = n;
+    a.id = 22;
+    return true;
+}
+
 
 
 LinkedList::LinkedList (){
@@ -381,6 +389,29 @@ void LinkedList::invert(){
     tail = head;
     head = newhead;
 
+}
+
+void LinkedList::list_merge(LinkedList b){
+    if(head == NULL){
+        return;
+    }
+    Node *t;
+    t = head;
+    while(t -> link != NULL){
+        t = t-> link;
+    }
+    t->link = b.head;
+
+}
+
+void make_array_from_list(Node array[],LinkedList a){
+    Node *t;
+    int idx  = 0;
+
+    for(t = a.head; t != NULL; t = t -> link){
+        array[idx] = *t;
+        idx++;
+    }
 }
 
 bool list_equal(LinkedList a, LinkedList b){

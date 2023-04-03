@@ -15,13 +15,15 @@ class Node{
     public:
         Node *link;
         bool setData(struct data p);
+        bool setData(string n, double s);
         struct data getData();
 };
 
 class LinkedList{
-    private:
-        Node *head, *tail;
+    
     public:
+        Node *head, *tail;
+    
         LinkedList();
         void add_to_head(Node t);
         void add_to_tail(Node t);
@@ -41,6 +43,8 @@ class LinkedList{
         double get_score(string node_name);
         void get_all();
         void invert();
+        friend void make_array_from_list(Node array[],LinkedList a);
+        void list_merge(LinkedList b);
         friend bool list_equal(LinkedList a, LinkedList b);
 
 };
@@ -48,6 +52,8 @@ class LinkedList{
 bool is_equal(Node *p1, Node *p2);
 
 bool  equal_data(Node t1, Node t2);
+
+void make_array_from_list(Node array[],LinkedList a);
 
 
 
