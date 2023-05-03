@@ -99,6 +99,11 @@ void run_program(LinkedListQueue &queue){
 }
 
 void call_insert(LinkedListQueue &queue){
+
+    if(queue.Queue_full() == true){
+        cout << "데이터가 꽉 찼습니다" << endl;
+        return;
+    }
     struct data indata;
 
     cout << "입력할 데이터를 입력해주세요 : " << endl;
